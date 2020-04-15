@@ -12,3 +12,4 @@
 12) Connect to QuPath
 13) Integrate Color deconvolution as preprocessing option
 14) Integrate CARE as preprocessing option
+15) Implement Probability/Score Threshold & Overlap Threshold for StarDist as variable
