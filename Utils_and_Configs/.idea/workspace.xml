@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="bea21f44-9a45-4268-9102-6f8a4f8e88fe" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Segmentation_Func_05.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Segmentation_Func_06.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/opsef_core_002.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.ipynb_checkpoints/Opsef_0_1_0_m1-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../.ipynb_checkpoints/Opsef_0_1_0_m1-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../OpSeF_Setup_0002-forMax09_12_1024.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../OpSeF_Setup_0002-forMax09_12_1024.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Opsef_0_1_47_m8.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../Opsef_0_1_47_m8.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pre_Post_Process001.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pre_Post_Process001.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pre_Post_Process002.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pre_Post_Process002.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Segmentation_Func_04.py" beforeDir="false" afterPath="$PROJECT_DIR$/Segmentation_Func_04.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tools_002.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tools_002.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UNet_CP01.py" beforeDir="false" afterPath="$PROJECT_DIR$/UNet_CP01.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opsef_core_001.py" beforeDir="false" afterPath="$PROJECT_DIR$/opsef_core_001.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/2D_demo/config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/2D_demo/thresholds.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/2D_demo/weights_best.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/2D_demo/weights_last.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/3D_demo/config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/3D_demo/thresholds.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/3D_demo/weights_best.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/examples/3D_demo/weights_last.h5" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/paper/2D_dsb2018/config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/paper/2D_dsb2018/thresholds.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../stardist/models/paper/2D_dsb2018/weights_last.h5" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1Y5AOoeU1EluCu0zm1bdYetpDz8" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/UNet_CP01.py" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/../../n2v/n2v/internals" />
+      <recent name="C:\Scripts\opsef\Utils_and_Configs" />
+      <recent name="C:\Users\trasse\.PyCharmCE2018.3\config\scratches" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bea21f44-9a45-4268-9102-6f8a4f8e88fe" name="Default Changelist" comment="" />
+      <created>1582205831087</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582205831087</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1870" y="1137" width="637" height="390" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1583783303773">
+      <screen x="1200" y="720" width="1920" height="1200" />
+    </state>
+    <state x="1870" y="1137" width="637" height="390" key="#com.intellij.fileTypes.FileTypeChooser/1200.720.1920.1200/0.747.1200.1173@1200.720.1920.1200" timestamp="1583783303773" />
+    <state x="1976" y="1090" width="424" height="484" key="FileChooserDialogImpl" timestamp="1584190247189">
+      <screen x="1200" y="720" width="1920" height="1200" />
+    </state>
+    <state x="1976" y="1090" width="424" height="484" key="FileChooserDialogImpl/1200.720.1920.1200/0.747.1200.1173@1200.720.1920.1200" timestamp="1584190247189" />
+    <state x="1849" y="1160" key="com.intellij.ide.util.TipDialog" timestamp="1584863869207">
+      <screen x="1200" y="720" width="1920" height="1200" />
+    </state>
+    <state x="406" y="1177" key="com.intellij.ide.util.TipDialog/1200.720.1920.1200/0.747.1200.1173@0.747.1200.1173" timestamp="1584690268997" />
+    <state x="1849" y="1160" key="com.intellij.ide.util.TipDialog/1200.720.1920.1200/0.747.1200.1173@1200.720.1920.1200" timestamp="1584863869207" />
+    <state x="1856" y="1007" width="672" height="678" key="search.everywhere.popup" timestamp="1584179823084">
+      <screen x="1200" y="720" width="1920" height="1200" />
+    </state>
+    <state x="410" y="1028" width="672" height="663" key="search.everywhere.popup/1200.720.1920.1200/0.747.1200.1173@0.747.1200.1173" timestamp="1583321644465" />
+    <state x="1856" y="1007" width="672" height="678" key="search.everywhere.popup/1200.720.1920.1200/0.747.1200.1173@1200.720.1920.1200" timestamp="1584179823084" />
+  </component>
+</project>

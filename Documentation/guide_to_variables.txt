@@ -1,0 +1,85 @@
+
+(Main) Variables used :
+
+input_def -> defines input & basic processing that does not change in each run
+
+input_def["input_type"] = ".lif" # or .tif
+input_def["root"] = "//mnt/ag-microscopy/SampleDataML/DemoOpSef004" 
+# put the lif file in this folder
+# use only one lif file per folder!!!
+# or have a subfolder /tiff in which you
+# put all tiff files.
+# tiff tesfiles are provided in the repository
+
+input_def["subset"] = ["All"] 
+# define string to search for in tiff, or the first letters in the lif image
+# or use "All" to process all images in the lif file or tiff folder
+
+input_def["rigth_size"] = (1024,1024) # only process images with this size in x,y
+input_def["mydtype"] = np.uint8 # bit depth of input images
+input_def["export_single_ch"] = 0   # which channel to extract from the lif file (if only one)
+
+input_def["split_z"] = False # chose here to split z-stack into multiple substacts to avoid that cells fuse after projection
+
+if input_def["split_z"]:# choosen, define:
+    input_def["z_step"] = 2 # size of substacks
+    input_def["export_multiple_ch"] = [0,1] # channels to be exported
+
+
+
+run_def -> define variable that might change in each run
+
+run_def["run_ID"] = "006" # give each run a new ID (unless you want to overwrite the old data)
+run_def["display_base"] = "000" 
+''' 
+display base is ideally set to "same".
+in this case the visualiation of segmentation border will be
+drawn on top of the input image to the segmentation
+If this behavior is not desired a three digit number
+that refers to the position in the pre_list might to be entered.
+example:
+pre_list = [["Median",3,8,"Sum",True,clahe_prm],["Mean",5,3,"Max",True,clahe_prm]]
+& the image resulting from:
+["Mean",5,3,"Max",True,clahe_prm]
+shall be used as basis for display:
+then set: 
+display_base = "001"
+'''
+
+# define preprocessing
+
+rund_def["clahe_prm"] = [(18,18),3] # Parameter for CLAHE
+run_def["pre_list"] = [["Median",5,5,"Max",True,rund_def["clahe_prm"]],["Mean",3,10,"Max",False,rund_def["clahe_prm"]],["Median",3,8,"Max",False,rund_def["clahe_prm"]]] 
+
+# preprocessing list follows this logic
+# (1) Filter type
+# (2) Kernel
+# (3) substract fixed value
+# (4) projection type
+# (5) calhe enhance (Yes/No) as defined above
+
+run_def["rescale_list"] = [0.55,0.6,0.65,0.7,0.8] # run1
+
+# define postprocessing & filtering
+# keep only the objects within this range of parameter
+
+# run 1,2,3
+run_def["filter_para"] = {}
+run_def["filter_para"]["area"] = [50,1000]
+run_def["filter_para"]["perimeter"] = [0,99999999]
+run_def["filter_para"]["circularity"] = [0,1] # (equivalent_diameter * math.pi) / perimeter
+run_def["filter_para"]["mean_intensity"] = [0,65535]
+run_def["filter_para"]["sum_intensity"] = [0,100000000000000]
+run_def["filter_para"]["eccentricity"] = [0,10]
+
+
+
+pc = pipeline_core -> define variable that define the processing pipeline and do not change between runs
+
+
+
+
+
+initModelSettings = {} <- in this dic all Settings for the model are stored
+
+initModelSettings["Cell_Channels"]

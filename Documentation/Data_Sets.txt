@@ -1,0 +1,47 @@
+Description of datasets
+
+Cobblestones dataset
+Images of cobblestones were taken with a Samsung Galaxy S6 Active Smartphone.
+ 
+Leaves
+Noise was added to the demo data from “YAPiC - Yet Another Pixel Classifier”
+https://github.com/yapic/yapic/tree/master/docs/example_data
+
+Small fluorescent nuclei datasets
+Images of Hek293 human embryonic kidney stained with a nuclear dye from the image set BBBC038v1 [Ref 1] 
+available from the Broad Bioimage Benchmark Collection (BBBC). Metadata is not available for this image 
+set to confirm staining conditions. Images were rescaled from 360 x 360 pixel to 512 x 512 pixel.
+
+3D colon tissue dataset
+We used low-signal to noise variant of the image set BBBC027 [Ref 2] from the BBBC.
+
+Epithelial cells dataset
+Images of cervical cells from the image set BBBC038v1 [Ref 1] available from the BBBC. 
+Cells were stained with a dye that labels membranes weakly and nuclei strongly. 
+The staining pattern is reminiscent of images of methylene blue stained cells. 
+However, metadata is not available for this image set to confirm staining conditions. 
+
+Skeletal muscle dataset
+A methylene blue stained skeletal muscle sections was recorded on a Nikon Eclipse Ni-E microscope equipped with a Märzhäuser SlideExpress2 
+system for automated handling of slides. The pixel size is 0.37*0.37 µm. The original, stitched, 44712 x 55444 pixel large image was used 
+as template for manual extraction of thirteen patches (2048 x 2048 pixel). After conversion to grey scale these patches were separated in 
+two batches: train containing two images and the test dataset.
+
+Kidney dataset
+A HE stained kidney paraffin sections were recorded on a Nikon Nikon Eclipse Ni-E microscope equipped with a Märzhäuser SlideExpress2 
+system for automated handling of slides. The pixel size is 180 x 180 nm. The original, stitched, 34816 x 51200 pixel large image was 
+used as template for manual extraction of two large patches (18432 x 6144 and 22528 x 5120 pixel). Next, the Eosin staining was extracted
+using the Color Deconvolution ImageJ plugin. This plugin implements the method described by Ruifrok and Johnston [Ref 3]. After conversion to
+greyscale smaller patches for initial training were prepared manually. 
+
+
+Ref 1
+Caicedo, J.C., et al., Nucleus segmentation across imaging experiments: the 2018 Data Science Bowl. Nat Methods, 2019. 16(12): p. 1247-1253.
+
+
+Ref 2
+Svoboda, D., O. Homola, and S. Stejskal. Generation of 3D Digital Phantoms of Colon Tissue. 2011. Berlin, Heidelberg: Springer Berlin Heidelberg.
+
+
+Ref 3
+Ruifrok, A.C. and D.A. Johnston, Quantification of histochemical staining by color deconvolution. Anal Quant Cytol Histol, 2001. 23(4): p. 291-9.

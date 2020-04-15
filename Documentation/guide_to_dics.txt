@@ -1,0 +1,10 @@
+
+(Main) Dictonaries used (name/key/value):
+
+mask_to_img_dic[segmentation_mask_name] = intensity_image_to_be_quantified
+mask_to_8bitimg_dic[segmentation_mask_name] = 8bit_image_to_be_used_to_create_overlay
+
+Optional:
+pair_dic[segmentation_mask_name] = mask_image_created_by_secon_channel
+class1_to_img_dic[class1_segmentation_mask_name] = intensity_image_to_be_quantified
+class2_to_img_dic[class2_segmentation_mask_name] = intensity_image_to_be_quantified
