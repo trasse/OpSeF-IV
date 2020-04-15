@@ -1,0 +1,14 @@
+1) Make Demo_Notebook for CSV Export
+2) Make Demo_Notebook for Fiji Connection
+3) Write How-to for for Fiji Connection
+4) Integrate StarDist Training Module
+5) Integrate U-Net Training Module
+6) Integrate CellPose Training Module
+7) Integrate Noise-to-Void as Preprocessing Option
+8) Stitch Segmentation Results
+9) Improve to Patches Function
+10) Import via Bio-formats
+11) Document integration of new model
+12) Connect to QuPath
+13) Integrate Color deconvolution as preprocessing option
+14) Integrate CARE as preprocessing option
