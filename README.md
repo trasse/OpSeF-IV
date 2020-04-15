@@ -133,5 +133,35 @@ see FAQ :
 
 ## How to Contribute
 
+OpSeF-IV currently contains four pre-trained model. Thus, it is is currently more a prove of concept.
+
+Many similar approaches are "developer to end user".
+
+The ideal behind OpSeF is a from staff image analyst to staff project.
+
+It will reach it's full potential only by being transformed into a community project.
+
+Thus, if you lack a feature, please try to add it yourself.
+
+Please find the current to-do list here: 
+
+[To Do](./To_Do/to_do.txt)
+
+Please consider to solve one of these tasks.
+
+If you train new model, please make them available in OpSeF.
+
+Hopefully, we could together publish the OpSeF-XL update 
+
+(with 40 pre-trained model instead of 4) within a year.
+
+Please contribute new Demo_Notebooks.
+
+Please contribute teaching material.
+
+If you get stuck please e-mail me & I will try to troubleshoot.
+
+Then please consider to multiply you knowledge by volunteering to help other analysts in using and developing OpSeF.  
+
 
 
