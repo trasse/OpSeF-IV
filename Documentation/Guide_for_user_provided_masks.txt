@@ -1,0 +1,30 @@
+0)
+Open Fiji/ImageJ
+1) 
+Open all images as stack:
+File/Import/Image_Sequence
+2) 
+(if not 8 bit): convert to 8-Bit
+Image/Type/8-bit
+3)
+Multiply image stack with 0.9
+Process/Math/Multiply
+4)
+Set color picker to 255
+5)
+Paint all areas you want to classify with the ROI tools and the Fill function (CNTR-F)
+6)
+Adjust Brigthness/Contrast to 254..255
+Image/Adjust/Brigthness&Contrast..
+7)
+Save Results in new Folder (e.g. Masks)
+File/Save_As/Image_Sequence../
+Activate option: Use slice labels as file name
+8) 
+Close ImageJ
+9)
+Open any renaming tool (e.g. ReNamer 7.1)
+rename original images (".tif" -> "_Ch00.tif")
+rename masks (".tif" -> "_Ch01.tif")
+10)
+copy both sets of images in one folder & use as input for OpSeF
