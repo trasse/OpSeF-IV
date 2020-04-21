@@ -303,7 +303,7 @@ def export_second_channel_for_mask(lifobj,pc,input_def,run_def):
     # export second channel to create mask or to qualify
     if input_def["input_type"] == ".tif":
         print("Export from tiff")
-        export_channel_from_tif(input_def["root"],pc["sub_f"],run_def["run_ID"],input_def["post_subset"])
+        export_channel_from_tif2(input_def["root"],pc["sub_f"],run_def["run_ID"],input_def["post_subset"]) # test, revert to export_channel_from_tif if it fails
     if input_def["input_type"] == ".lif":
         print("Export from lif")
         export_channel_from_lif(lifobj,input_def["root"],input_def["post_export_single_ch"],input_def["rigth_size"],input_def["mydtype"],run_def["run_ID"],pc["sub_f"])

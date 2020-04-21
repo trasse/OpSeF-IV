@@ -13,3 +13,5 @@
 13) Integrate Color deconvolution as preprocessing option
 14) Integrate CARE as preprocessing option
 15) Implement Probability/Score Threshold & Overlap Threshold for StarDist as variable
+16) Export to CSV has this bug: if one of the images contains no project at all, the entire export fails
+17) fully integrate manual mask pipeline in OpSeF Setup

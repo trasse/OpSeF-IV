@@ -99,12 +99,19 @@ def cv_binary_processor_plus(im, todo):
     return img_out
 
 
-def get_binary(myimg,para):
+def get_binary(myimg,para,rd):
+    # creates a mask from a second channel
+
     pre,o_thres_f,binary_filter = para
     # filter
     img_pp = ski_uniform_filter(myimg,pre[0],pre[1])
     # thresholding
-    thres = threshold_otsu(img_pp)
+    try:
+        thres = threshold_otsu(img_pp)
+        print(thres)
+    except: # if otsu fails the threshold is set to the max value
+        thres = np.iinfo(img_pp.dtype).max
+        print("Warning, Otsu failed!! ")
     binary_img = np.zeros(myimg.shape, dtype=bool)
     binary_img[np.where(img_pp > (thres * o_thres_f[0]))] = 1
     # binary filtering
