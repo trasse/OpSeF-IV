@@ -9,7 +9,7 @@ We provide two generic non-microscopy image collections to illustrate common seg
 We hope that OpSeF biomedical users will provide further image collections, analystst Jupyter notebooks, and pre-trained models. Thereby, OpSeF might soon become, both a “model store”, in which appropriate model might be identified with reasonable effort and a valuable resource for teaching biomedical user CNN-based segmentation.
 
 
-## Technical desription 
+## Technical description 
 
 OpSeF has been primarily developed for staff image analysts with solid knowledge in image analysis, thorough understating of the principles of machine learning, and ideally basic skills in Python. 
 
