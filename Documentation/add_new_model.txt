@@ -1,0 +1,69 @@
+1) Save model in correct folder
+
+2)
+Add model to model dic in Config Notebook
+
+3)
+Add new model in Segmentation_Func_007:
+
+def initialize_model(init_model,model_type,which_model):
+    # initialize models
+    # returns a dictonary of models that can be called
+    mds = {}
+    # UNet Cell Profiler
+    if model_type == "Cellprofiler_UNet":
+        option_dict_conv,option_dict_bn = init_model["UNetSettings"]
+        os.environ["KERAS_BACKEND"] =  "tensorflow"
+        if which_model == "UNet_CP001":
+            model = unet_initialize(init_model["UNetShape"],option_dict_conv,option_dict_bn,init_model["UNet_model_file_CP01"], automated_shape_adjustment=True)
+            mds["UNet_CP001"] = model
+    # Stardist
+    elif model_type == "StarDist":
+        if which_model == "SD_2D_dsb2018":
+            model = StarDist2D(None, name='2D_dsb2018', basedir = init_model["basedir_StarDist"])
+            mds["SD_2D_dsb2018"] = model
+    elif model_type == "StarDist":
+        if which_model == "SD_2D_dsb2018":
+            model = StarDist2D(None, name='2D_dsb2018', basedir = init_model["basedir_StarDist"])
+            mds["SD_2D_dsb2018"] = model
+
+4) add it to:
+
+def segment(input_def, pc, run_def,initModelSettings):
+    # runs the segmentation
+    # define input:
+    input_path = os.path.join(input_def["root"], "Processed_{}".format(run_def["run_ID"]), pc["sub_f"][1])
+    files = glob("{}/*RGBInput*.tif".format(input_path))
+    file_name_core = [os.path.split(x)[1] for x in files]
+    results_dic_list = []
+    # load model and process data
+    for run_sub_id,run_now in enumerate(run_def["run_now_list"]):
+        print("run_now", run_now)
+        im_id = 0
+        # load model Cellpose
+        if run_now == "Cellpose":
+            print("Run Cellpose Model: ",run_def["ModelType"][run_sub_id])
+            if run_def["ModelType"][run_sub_id] == "CP_nuclei":
+                my_model = initialize_model(initModelSettings,run_now,"CP_nuclei")
+            elif run_def["ModelType"][run_sub_id] == "CP_cyto":
+                my_model = initialize_model(initModelSettings,run_now,"CP_cyto")
+        # load model StarDist
+        elif run_now == "StarDist":
+            print("Run StarDist",run_def["ModelType"][run_sub_id])
+            if run_def["ModelType"][run_sub_id] == "SD_2D_dsb2018":
+                print("Run_SD_",run_now)
+                my_model = initialize_model(initModelSettings,run_now,"SD_2D_dsb2018")
+            if run_def["ModelType"][run_sub_id] == "SD_dsb_versatile":
+                print("Run_SD_",run_now)
+                my_model = initialize_model(initModelSettings,run_now,"SD_dsb_versatile")
+            if run_def["ModelType"][run_sub_id] == "SD_patho":
+                print("Run_SD_",run_now)
+                my_model = initialize_model(initModelSettings,run_now,"SD_patho")
+        elif run_now == "Cellprofiler_UNet":
+            if run_def["ModelType"][run_sub_id] == "UNet_CP001":
+                print("Run Cellprofiler_UNet",run_def["ModelType"][run_sub_id])
+                my_model = initialize_model(initModelSettings,run_now,"UNet_CP001")
+4)
+Call model in demo notebook
+
+

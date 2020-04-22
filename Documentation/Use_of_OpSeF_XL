@@ -1,0 +1,8 @@
+Re-initialize with:
+OpSeF_XL_Configure_001
+
+Run (like in OpSeF IV) a demo notebook
+OpSeF_XL_Setup_Basic_000_SkeletalMuscle
+
+& exceute it in:
+OpSeF_XL_Run_000_dev
