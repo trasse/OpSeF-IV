@@ -1,0 +1,15 @@
+Do:
+print(mask_files)
+
+The name of the example mask to spit is:
+000_CP_Mask_0.6_RGBInput_000_Ch_00_muscle_blue-2.tif
+
+
+The parts are as follows (between "_"):
+0   1   2    3     4      5  6   7  8 = muscle 9 = blue-2.tif
+000_CP_Mask_0.6_RGBInput_000_Ch_00_muscle_blue-2.tif
+
+We want to use 8 & 9 as unquique search string.
+
+Thus core_match = [8:10]
+
