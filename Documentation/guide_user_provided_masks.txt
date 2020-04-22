@@ -24,7 +24,7 @@ Activate option: Use slice labels as file name
 Close ImageJ
 9)
 Open any renaming tool (e.g. ReNamer 7.1)
-rename original images (".tif" -> "_Ch00.tif")
-rename masks (".tif" -> "_Ch01.tif")
+rename original images (Add Ch_00 prefix)
+rename masks (Add Ch_01 prefix)
 10)
 copy both sets of images in one folder & use as input for OpSeF
