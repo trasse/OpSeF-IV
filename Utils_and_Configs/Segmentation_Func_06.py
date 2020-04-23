@@ -384,7 +384,7 @@ def results_to_csv(mask_to_img_dic,get_property,root,sub_f,run_ID,output_folder,
         # to avoid confusion for Fiji user
         results_df.rename(columns={'centroid-0':'centroid-0_Fiji_Y'}, inplace=True)
         results_df.rename(columns={'centroid-1':'centroid-1_Fiji_X'}, inplace=True)
-        new_fn = "Results_{}_{}.csv".format(os.path.split(key)[1],os.path.split(value)[1])
+        new_fn = "Results_{}_{}_{}.csv".format(tag,os.path.split(key)[1],os.path.split(value)[1])
         new_fp = os.path.join(root,"Processed_{}".format(run_ID),sub_f[output_folder],new_fn)
         results_df.to_csv(new_fp, sep=';', decimal=',')
     # get results per image
