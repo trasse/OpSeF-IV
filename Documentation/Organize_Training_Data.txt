@@ -1,0 +1,8 @@
+
+Tiff input
+Masks Python label
+
+/CNNname_Datasetname/Train/images
+/CNNname_Datasetname/Train/masks
+/CNNname_Datasetname/Test/images
+/CNNname_Datasetname/Test/masks
