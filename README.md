@@ -168,7 +168,7 @@ if pc["Do_ClusterAnalysis"]: # Define (below) which values will be included in t
 
 ### Export to and Import from AnnotatorJ (coming soon)
 
-
+Please see the [AnnotatorJ README](annotatorj-opsef/README.md).
 
 ### Further Information:
 
