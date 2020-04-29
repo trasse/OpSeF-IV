@@ -3,7 +3,7 @@
 This repository contains the codes for the ImageJ plugin AnnotatorJ which aims to ease object annotation. An exporter plugin, AnnotatorJExporter is also included.
 OpSeF integration is implemented in the AnnotatorJImportOpSef plugin.
 
-A detailed user manual is provided in [**AnnotatorJ_documentation.pdf**](../Documentation/AnnotatorJ_documentation.pdf) in this repository.
+A detailed user manual will soon be provided in [**AnnotatorJ_documentation.pdf**](../Documentation/AnnotatorJ_documentation.pdf) in this repository. For reference, please see the [original documentation](https://bitbucket.org/biomag/annotatorj/src/master/AnnotatorJ_documentation.pdf).
 
 # Prerequisites
 
@@ -70,7 +70,7 @@ NOTE: Building from source is also possible using an IDE e.g. Eclipse. See the [
 
 ## Using a release version
 
-A [standalone built version](../../downloads/AnnotatorJ.zip) that only contains the core ImageJ functionality and this plugin is provided.
+A [standalone built version](https://github.com/trasse/OpSeF-IV/releases/tag/v0.0.1) that only contains the core ImageJ functionality and this plugin is provided.
 Currently, Windows and Linux versions are available.
 
 No installation is needed for releases; simply extract the archive to any empty folder on your computer.
@@ -169,7 +169,7 @@ The position and size of the objects is stored in the coordinates of the rectang
 To use this functionality, a trained keras U-Net model must be provided. The default location is the */plugins/models/* folder of your ImageJ/Fiji installation or the standalone release of this plugin. The default names of the model and config file are *model_real.json* and *model_real_weights.h5*.
 You can change these names and the path in the file *AnnotatorJconfig.txt* automatically created when first running the plugin, in the default */plugins/models/* folder.
 
-An example pre-trained model trained on nucleus images can be downloaded from the [Downloads](https://bitbucket.org/biomag/annotatorj/downloads/models.zip) page of this repository.
+An example pre-trained model trained on nucleus images can be downloaded from the [Downloads](https://bitbucket.org/biomag/annotatorj/downloads/models.zip) page of the [original repository](https://bitbucket.org/biomag/annotatorj) or from [releases](https://github.com/trasse/OpSeF-IV/releases/tag/v0.0.1).
 You can also train a new one on your own data in e.g. Python and save it with this code block:
 
 ```python
