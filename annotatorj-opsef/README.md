@@ -3,7 +3,7 @@
 This repository contains the codes for the ImageJ plugin AnnotatorJ which aims to ease object annotation. An exporter plugin, AnnotatorJExporter is also included.
 OpSeF integration is implemented in the AnnotatorJImportOpSef plugin.
 
-A detailed user manual will soon be provided in [**AnnotatorJ_documentation.pdf**](../Documentation/AnnotatorJ_documentation.pdf) in this repository. For reference, please see the [original documentation](https://bitbucket.org/biomag/annotatorj/src/master/AnnotatorJ_documentation.pdf).
+A detailed user manual is provided in [**AnnotatorJ_OpSeF_documentation.pdf**](../Documentation/AnnotatorJ_OpSeF_documentation.pdf) in this repository. For reference, please see the [original documentation](https://bitbucket.org/biomag/annotatorj/src/master/AnnotatorJ_documentation.pdf).
 
 # Prerequisites
 
@@ -66,7 +66,7 @@ To use this tool you need to:
 ```
 
 
-NOTE: Building from source is also possible using an IDE e.g. Eclipse. See the [documentation](../Documentation/AnnotatorJ_documentation.pdf) for instructions.
+NOTE: Building from source is also possible using an IDE e.g. Eclipse. See the [documentation](../Documentation/AnnotatorJ_OpSeF_documentation.pdf) for instructions.
 
 ## Using a release version
 
@@ -162,6 +162,8 @@ The position and size of the objects is stored in the coordinates of the rectang
 		- Edit mode --> edits a selected, already saved contour in the ROI list by clicking on it on the image
 		- Class mode --> assigns the selected class to the selected contour in the ROI list by clicking on it on the image and displays its contour in the class's colour (can be set in the Class window); clicking on the object a second time unclassifies it
 
+Note: Class mode currently only works on data following the OpSeF data structure.
+
 ***
 
 ## Contour assist
@@ -210,11 +212,11 @@ Note: If the same colour as the current annotation colour is selected for a clas
 
 ## Segmentation mask import
 
-16-bit multi-labelled segmentation masks created in OpSeF will be imported for editing and/or classification (see [instructions](#how-to-annotate) or [documentation](../Documentation/AnnotatorJ_documentation.pdf)).
+16-bit multi-labelled segmentation masks created in OpSeF will be imported for editing and/or classification (see [instructions](#how-to-annotate) or [documentation](../Documentation/AnnotatorJ_OpSeF_documentation.pdf)).
 
 ## Classified mask import
 
-16-bit multi-labelled segmentation masks created and classified in OpSeF will be imported for editing and/or classification (see [instructions](#how-to-annotate) or [documentation](../Documentation/AnnotatorJ_documentation.pdf)).
+16-bit multi-labelled segmentation masks created and classified in OpSeF will be imported for editing and/or classification (see [instructions](#how-to-annotate) or [documentation](../Documentation/AnnotatorJ_OpSeF_documentation.pdf)).
 Classes will be marked with different contour colours.
 
 
@@ -237,7 +239,7 @@ annotation_folder
 	|--- ...
 ```
 
-This structure is created by the AnnotatorJ plugin such that the *annotation folder* is created as a sub-folder of the *image folder* with the name of the selected annotation class (see the [documentation](../Documentation/AnnotatorJ_documentation.pdf)).
+This structure is created by the AnnotatorJ plugin such that the *annotation folder* is created as a sub-folder of the *image folder* with the name of the selected annotation class (see the [documentation](../Documentation/AnnotatorJ_OpSeF_documentation.pdf)).
 
 Possible export options are displayed above.
 
