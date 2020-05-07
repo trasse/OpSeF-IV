@@ -47,11 +47,12 @@ public class ImportOpSef{
 		// file open dialog
 		OpenDialog opener=null;
 		
-		opener=new OpenDialog("Select the FilePairList text file",concatPath,"FilePairList_cobblestones512_999_OptionB_mypath.txt");
+		opener=new OpenDialog("Select the FilePairList text file",concatPath,"FilePairList_yourdataset.txt");
 
 		// check if cancel was pressed:
 		String validPath=opener.getPath();
-		if (validPath==null) {
+		File tmpValidFile=new File(validPath);
+		if (validPath==null || !(tmpValidFile.exists() && !tmpValidFile.isDirectory())) {
 			// path is null if the dialog was canceled
 			IJ.log("canceled file open");
 			return;
@@ -362,7 +363,7 @@ public class ImportOpSef{
      	}
      	imParam.setStack(imStack);
 
-     	initParams.put("z_inputImage2open",imParam);
+     	initParams.put("x_inputImage2open",imParam);
      	initParams.put("z_inputROIs2open",managers);
      	// also store the original mask names for reference in the saving fcn
      	initParams.put("z_origMaskFileNames",maskList);

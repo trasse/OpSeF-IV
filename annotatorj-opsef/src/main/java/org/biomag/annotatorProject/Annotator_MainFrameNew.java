@@ -38,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
+import javax.swing.Timer;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -234,6 +235,11 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
     private String exportClassFolderFromArgs;
     private JCheckBox chckbxClass;
     private boolean classMode;
+    private boolean initializedRoisFromArgs;
+    private int prevSliceIdx;
+    private boolean isProcessingWheelEvent;
+    private Timer wheelMovementTimer;
+    private int wheelStepCounter;
 
 
 	// options frame elements:
@@ -965,6 +971,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 
 		imageFromArgs=false;
 		currentSliceIdx=-1;
+		prevSliceIdx=-1;
 		ArrayList<RoiManager> managerList=new ArrayList<RoiManager>();
 		roisFromArgs=false;
 		origMaskFileNames=null;
@@ -972,6 +979,9 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		exportFolderFromArgs=null;
 		exportRootFolderFromArgs=null;
 		exportClassFolderFromArgs=null;
+		initializedRoisFromArgs=false;
+		isProcessingWheelEvent=false;
+		wheelStepCounter=1;
 
 		closeingOnPurpuse=false;
 
@@ -1150,7 +1160,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 
 
 		// input image and rois
-		customizableParams.put("z_inputImage2open",null);
+		customizableParams.put("x_inputImage2open",null);
 		customizableParams.put("z_inputROIs2open",null);
 		customizableParams.put("z_origMaskFileNames",null);
 		customizableParams.put("exportFolderFromArgs",null);
@@ -1317,7 +1327,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 
 
 	        		// custom input image & ROI import
-	        		case "z_inputImage2open":
+	        		case "x_inputImage2open":
 	        			// set the input image from the param
 	        			if (pair.getValue() instanceof String){
 	        				// file path, open it
@@ -1350,7 +1360,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 	        				imageFromArgs=true;
 	        				new Runner("Open", imp);
 	        			} else {
-	        				IJ.log("Invalid value parsed for variable \"z_inputImage2open\". Must be either String or ImagePlus.");
+	        				IJ.log("Invalid value parsed for variable \"x_inputImage2open\". Must be either String or ImagePlus.");
 	        			}
 	        			break;
 
@@ -1359,12 +1369,15 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 	        			if (pair.getValue() instanceof RoiManager){
 	        				// only 1 manager object with ROIs, set it
 	        				roisFromArgs=true;
+	        				initializedRoisFromArgs=false;
 	        				//manager=(RoiManager) pair.getValue();
 	        				updateROImanager((RoiManager) pair.getValue(),showCnt); // also display the rois if checked
 	        				// TODO: check what else to set here
+	        				initializedRoisFromArgs=true;
 	        			} else if (pair.getValue() instanceof ArrayList<?>){
 	        				// multiple ROIs to be opened
 	        				roisFromArgs=true;
+	        				initializedRoisFromArgs=false;
 	        				// TODO
 	        				managerList=(ArrayList<RoiManager>)pair.getValue();
 	        				//manager=managerList.get(0);
@@ -1386,15 +1399,33 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		        				for (int r=0; r<tmpCount; r++){
 		        					int tmpGroup=tmpRoiManager.getRoi(r).getGroup();
 		        					String tmpGroupName="Class_"+String.format("%02d",tmpGroup);
+		        					//debug:
+		        					//IJ.log(tmpGroupName);
 		        					if (tmpGroup>0 && !classFrameNames.contains(tmpGroupName)){
 		        						classFrameNames.add(tmpGroupName);
 		        						//int tmpGroupColourIdx=getClassColourIdx(tmpRoiManager.getRoi(r).getStrokeColor());
-		        						Color tmpColour=tmpRoiManager.getRoi(r).getFillColor();
-		        						if (tmpColour==null)
-		        							tmpColour=tmpRoiManager.getRoi(r).getStrokeColor();
-		        						Color tmpColour2=new Color(tmpColour.getRed(),tmpColour.getGreen(),tmpColour.getBlue());
-		        						int tmpGroupColourIdx=getClassColourIdx(tmpColour2);
-		        						classFrameColours.add(tmpGroupColourIdx);
+		        						//Color tmpColour=null;
+		        						//tmpColour=tmpRoiManager.getRoi(r).getFillColor();
+		        						//if (tmpColour==null)
+		        							Color tmpColour=tmpRoiManager.getRoi(r).getStrokeColor();
+		        						//Color tmpColour2=new Color(tmpColour.getRed(),tmpColour.getGreen(),tmpColour.getBlue());
+		        						int tmpGroupColourIdx=getClassColourIdx(tmpColour); //tmpColour2);
+		        						if (tmpGroupColourIdx==-1)
+		        							tmpGroupColourIdx=0;
+
+		        						// assign a free colour to the new class
+		        						if (!classFrameColours.contains(tmpGroupColourIdx))
+		        							classFrameColours.add(tmpGroupColourIdx);
+		        						else {
+		        							for (int i=0;i<8;i++){
+												if (!classFrameColours.contains(i)){
+													// found first free colour, take it
+													classFrameColours.add(i);
+													break;
+												}
+											}
+		        						}
+		        						
 		        						if (selectedClassNameNumber<0){
 		        							selectedClassNameNumber=tmpGroup;
 		        						}
@@ -1403,6 +1434,28 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		        					}
 		        				}
 		        			}
+
+		        			///*
+		        			// colour import doesn't work, repaint all contours to the "imported" colours
+		        			for (int k=0; k<managerList.size(); k++) {
+		        				tmpRoiManager=managerList.get(k);
+		        				int tmpCount=tmpRoiManager.getCount();
+		        				for (int r=0; r<tmpCount; r++){
+		        					Roi tmpROI=tmpRoiManager.getRoi(r);
+		        					int tmpGroup=tmpROI.getGroup();
+		        					if (tmpGroup>0){
+		        						int tmpIdx=classFrameColours.get(classFrameNames.indexOf("Class_"+String.format("%02d",tmpGroup)));
+		        						//IJ.log("group: "+String.valueOf(tmpGroup)+"\t|\ttmpIdx: "+String.valueOf(tmpIdx));
+		        						tmpROI.setStrokeColor(getClassColour(tmpIdx));
+		        						tmpRoiManager.setRoi(tmpROI,r);
+		        					} else {
+		        						tmpROI.setStrokeColor(currentSelectionColor);
+		        					}
+		        				}
+		        				managerList.set(k,tmpRoiManager);
+		        			}
+		        			//*/
+
 		        			if (classFrameNames.size()==0 && classFrameColours.size()==0){
 		        				// no class info was found in the rois
 		        				classFrameNames=null;
@@ -1410,7 +1463,10 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		        			}
 		        			startedClassifying=true;
 
+		        			//debug:
+		        			IJ.log("initial ROI manager from args input, count: "+String.valueOf(managerList.get(0).getCount()));
 	        				updateROImanager(managerList.get(0),showCnt); // also display the rois if checked
+	        				initializedRoisFromArgs=true;
 	        			} else {
 	        				IJ.log("Invalid value parsed for variable \"z_inputROIs2open\". Must be either RoiManager or ArrayList<RoiManager>.");
 	        			}
@@ -1455,7 +1511,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 	        			if (pair.getValue() instanceof String[]) {
 	        				origImageFileNames=(String[]) pair.getValue();
 	        			} else
-	        				IJ.log("Invalid value parsed for variable \"origImageFileNames\". Must be String array.");
+	        				IJ.log("Invalid value parsed for variable \"z_origImageFileNames\". Must be String array.");
 	        			break;
 
 	        		case "exportFolderFromArgs":
@@ -1499,7 +1555,12 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 	        			IJ.log("defaultAnnotType");
 	        			IJ.log("rememberAnnotType");  
 	        			IJ.log("z_inputROIs2open");
-	        			IJ.log("z_inputImage2open");
+	        			IJ.log("x_inputImage2open");
+	        			IJ.log("z_origMaskFileNames");
+	        			IJ.log("z_origImageFileNames");
+	        			IJ.log("exportFolderFromArgs");
+	        			IJ.log("exportRootFolderFromArgs");
+	        			IJ.log("exportClassFolderFromArgs");
 	        			break;
 	        	}
 	        } else {
@@ -1511,6 +1572,18 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 
 
 	public void updateROImanager(RoiManager baseROImanager,boolean display){
+		// close all instances of roi manager opened before continue
+		if (manager!=null){
+			manager.runCommand("Show None");
+			manager.close();
+			manager=RoiManager.getInstance();
+			while (manager!=null){
+				manager.runCommand("Show None");
+				manager.close();
+				manager=RoiManager.getInstance();
+			}
+		}
+
 		if (baseROImanager==null){
 			IJ.log("prev ROI manager is null");
 			manager=new RoiManager();
@@ -1543,16 +1616,20 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 			}
 		}
 
-		// close all instances of roi manager opened before continue
-		if (manager!=null){
+		
+
+		// close it again to be sure
+		if (manager!=null)
 			manager.close();
-			manager=RoiManager.getInstance();
-			while (manager!=null){
-				manager.close();
-				manager=RoiManager.getInstance();
+		
+		if (imp==null){
+			imp=WindowManager.getCurrentImage();
+			if (imp==null){
+				IJ.log("no image is opened, opening a dummy");
+				imp=new ImagePlus();
 			}
 		}
-		
+
 		manager=new RoiManager();
 		
 		for (int c=0; c<tmpRoiCount; c++){
@@ -1569,13 +1646,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 				IJ.log("cROI is null...");
 			
 			cROI.setName(baseROInames[c]);
-			if (imp==null){
-				imp=WindowManager.getCurrentImage();
-				if (imp==null){
-					IJ.log("no image is opened, opening a dummy");
-					imp=new ImagePlus();
-				}
-			}
+			
 			//imp.setRoi(cROI);
 
 			// check if default class is set & this ROI is unclassified
@@ -1594,8 +1665,13 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 			if (manager==null)
 				IJ.log("manager is null...");
 			
+			int tmpCountBefore=manager.getCount();
 			//manager.runCommand("Add");
 			manager.addRoi(cROI);
+			if (manager.getCount()!=tmpCountBefore+1){
+				// failed to add current roi to the manager
+				IJ.log("Failed adding ROI #"+String.valueOf(c)+" to the current manager in updateROImanager() fcn");
+			}
 		}
 		int newRoiCount=manager.getCount();
 		IJ.log("new ROI count: "+String.valueOf(newRoiCount));
@@ -2444,6 +2520,10 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		    if (state == ItemEvent.SELECTED){
 		      IJ.log(rbText + " selected");
 		      isSelectedRb=true;
+		    } else {
+		    	//debug:
+		    	//IJ.log("    (not a radiobutton selected event)");
+		    	return;
 		    }
 
 		    // set vars according to radio buttons
@@ -2518,9 +2598,13 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 
         	Roi tmpROI=null;
         	Roi[] manyROIs=manager.getSelectedRoisAsArray();
-			IJ.log("found "+String.valueOf(manyROIs.length)+" rois");
+			IJ.log("found "+String.valueOf(manyROIs.length)+" rois of class #"+String.valueOf(selectedClassNameNumber));
 			for (int i=0; i<manyROIs.length; i++) {
 	        	tmpROI=manyROIs[i];
+	        	if (tmpROI.getGroup()!=selectedClassNameNumber){
+	        		// for some reason, when no roi has a normal group (>0), all get selected --> need to skip them
+	        		continue;
+	        	}
 	        	tmpROI.setStrokeColor(selectedClassColourIdx);
 	        	//tmpROI.setStrokeWidth(1.0);
 	        	/*
@@ -2928,6 +3012,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 
 			// get/set slice info (currentSlice attribute is 1-based!)
 			currentSliceIdx=imp.getCurrentSlice();
+			prevSliceIdx=currentSliceIdx+0;
 			IJ.log("Initial slice is: "+currentSliceIdx);
 		}
 
@@ -3133,32 +3218,35 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		// prepare annotation tools
 		if (selectedAnnotationType.equals("instance") || selectedAnnotationType.equals("bounding box")){
 			// instance segmentation
-			// open ROI manager in bg
-			manager = RoiManager.getInstance();
-			if (manager == null){
-				// display new ROImanager in background
-			    //manager = new RoiManager(false);
-			    // actually display it
-			    manager = new RoiManager();
-			}
-			else{
-				if (roisFromArgs) {
-					// roi list was parsed in input args, keep them unchanged
-				} else {
-					// delete selections from image
-					manager.runCommand("Show None");
-					//Selection selectionObj=new Selection();
-					//selectionObj.run("none");
-					manager.close();
-					manager=null;
-					//manager = new RoiManager(false);
-					manager = new RoiManager();
+			if (roisFromArgs && !initializedRoisFromArgs){
+				// skipt this roi manager init step
+			} else {
+				// open ROI manager in bg
+				manager = RoiManager.getInstance();
+				if (manager == null){
+					// display new ROImanager in background
+				    //manager = new RoiManager(false);
+				    // actually display it
+				    manager = new RoiManager();
+				}
+				else{
+					if (roisFromArgs) {
+						// roi list was parsed in input args, keep them unchanged
+					} else {
+						// delete selections from image
+						manager.runCommand("Show None");
+						//Selection selectionObj=new Selection();
+						//selectionObj.run("none");
+						manager.close();
+						manager=null;
+						//manager = new RoiManager(false);
+						manager = new RoiManager();
+					}
+				}
+				if (showCnt) {
+					manager.runCommand("Show All");
 				}
 			}
-			if (showCnt) {
-				manager.runCommand("Show All");
-			}
-
 
 			instance.toFront();
 			imWindow.toFront();
@@ -6628,7 +6716,8 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 			    		defaultClassNumber=Integer.parseInt(selectedClassName.substring(selectedClassName.lastIndexOf("_")+1,selectedClassName.length()));
 
 			    		// set all unassigned objects to this class
-			    		setDefaultClass4objects();
+			    		//setDefaultClass4objects();
+			    		runDefaultClassSetting4allSlices();
 
 			    		// show the latest opened roi stack again
 						updateROImanager(managerList.get(currentSliceIdx-1),showCnt);
@@ -6645,6 +6734,7 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 
 		// set default class (group) for all unclassified objects
 		setDefaultClass4objects();
+		//runDefaultClassSetting4allSlices();
 
 		
 		scrollPaneClasses.setViewportView(classListList);
@@ -6655,6 +6745,12 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		classListList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				JList sourceObj=(JList)e.getSource();
+				if (e.getValueIsAdjusting()){
+					// still changing, do nothing
+					//debug:
+					//IJ.log("    (list selecting is still in progress)");
+					return;
+				}
 		        ListSelectionModel lsm = (ListSelectionModel)sourceObj.getSelectionModel();
 				int selectedClassNameIdx=lsm.getMaxSelectionIndex();
 				String selectedClassNameVar;
@@ -6884,14 +6980,19 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		finishedSaving=false;
 
 		// save the latest opened roi stack internally
-    	if (manager!=null && classMode)
+    	if (manager!=null && classMode && (roisFromArgs && managerList.size()>0))
 			managerList.set(currentSliceIdx-1,manager);
 		//updateROImanager(managerList.get(currentSliceIdx-1),showCnt);
 
 		// from AnnotatorExportFrameNew.java startExport() fcn:
 
 		// create export folder:
-		String exportFolder=exportRootFolderFromArgs+File.separator+exportFolderFromArgs;
+		String exportFolder=null;
+		if (exportRootFolderFromArgs!=null)
+			exportFolder=exportRootFolderFromArgs+File.separator+exportFolderFromArgs;
+		else
+			exportFolder=null; // TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 		File outDir=new File(exportFolder);
 		if (outDir.exists() && outDir.isDirectory()) {
 			// folder already exists
@@ -7195,8 +7296,8 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		// also save current rois to the temp folder
 		saveData();
 
-		// show the latest opened roi stack again
-		updateROImanager(managerList.get(currentSliceIdx-1),showCnt);
+		// show the latest opened roi stack again <-- done in saveData() fcn
+		//updateROImanager(managerList.get(currentSliceIdx-1),showCnt);
 
 		// should also parse the mask names for saving then the annot folder should be selected automatically like 'opsef'
 	}
@@ -7385,13 +7486,32 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 	        	if (tmpROI.getGroup()<1){
 	        		// unclassified ROI
 	        		//debug:
-	        		IJ.log("---- ROI '"+tmpROI.getName()+"' assigned to default class '"+selectedClassNameVar+"'");
+	        		//IJ.log("---- ROI '"+tmpROI.getName()+"' assigned to default class '"+selectedClassNameVar+"'");
 	        		tmpROI.setGroup(defaultClassNumber);
 	    			tmpROI.setStrokeColor(defaultClassColour);
 	        	}
 	        }
 	        IJ.log("added them to the default class: "+selectedClassNameVar);
 		}
+	}
+
+
+	// loops through all sclies of the stack and sets the default class for all objects in all roi sets
+	public void runDefaultClassSetting4allSlices(){
+		// save the latest opened roi stack internally
+    	if (manager!=null && classMode)
+			managerList.set(currentSliceIdx-1,manager);
+
+		// loop through all slices
+		for (int mi=0; mi<managerList.size(); mi++) {
+			// get the i-th roi set
+			manager=managerList.get(mi);
+			// set the default class
+			setDefaultClass4objects();
+		}
+
+		// show the latest opened roi stack again
+		//updateROImanager(managerList.get(currentSliceIdx-1),showCnt); // do this outside of the fcn
 	}
 
 
@@ -7804,6 +7924,8 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 				        			if (!usedClassNameNumbers.contains(selectedClassNameNumber))
 				        				usedClassNameNumbers.add(selectedClassNameNumber);
 
+				        			//debug:
+				        			//IJ.log("    (cur group: "+String.valueOf(tmpROI.getGroup())+" --> "+String.valueOf(selectedClassNameNumber)+")");
 				        			//origStrokeWidth=tmpROI.getStrokeWidth();
 				        			tmpROI.setGroup(selectedClassNameNumber);
 					        		// its colour:
@@ -7896,48 +8018,22 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
         // new trying to get the scroll amount correctly:
         @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
+
+        	if (wheelMovementTimer != null && wheelMovementTimer.isRunning()) {
+                wheelMovementTimer.stop();
+            }
+
         	int direction=e.getWheelRotation();
-        	//debug:
-        	//IJ.log("direction: "+String.valueOf(direction));
-        	int amount=0;
-        	int up=0;
-        	if (direction>0){
-        		amount=e.getScrollAmount();
-        		IJ.log("--Mouse wheel moved down "+String.valueOf(amount)+" | in direction: "+String.valueOf(direction)); //next
-        	}
-        	else {
-        		amount=-e.getScrollAmount();
-        		IJ.log("--Mouse wheel moved up "+String.valueOf(amount)+" | in direction: "+String.valueOf(direction)); //prev
-        		up=2;
-        	}
+        	wheelStepCounter=wheelStepCounter+direction;
+        	IJ.log("wheelStepCounter: "+String.valueOf(wheelStepCounter));
 
-        	// update currently opened roi manager in the manager list
-        	managerList.set(currentSliceIdx-1,manager);
+        	wheelMovementTimer = new Timer(100, new WheelMovementTimerActionListener()); // timer delay: 100 ms
+            wheelMovementTimer.setRepeats(false);
+            wheelMovementTimer.start();
 
-        	currentSliceIdx=imp.getCurrentSlice() + direction; //+ direction;
-        	//int tempSlice=imp.getCurrentSlice();
-        	if (imp!=null && imp.getStack().getSize()>1) {
-        		//currentSliceIdx=imp.getCurrentSlice();
-        		IJ.log("Set current slice to "+String.valueOf(currentSliceIdx));
-        		if (currentSliceIdx>=1 && currentSliceIdx<=imp.getStack().getSize()) {
-	        		// display the roi set corresponding to this slice
-	        		//debug:
-	        		IJ.log("----valid----");
-	        		imp.setPosition(1, currentSliceIdx, 1);
-	        		updateROImanager(managerList.get(currentSliceIdx-1),showCnt); // also display the rois if checked
-	        		imp.setPosition(1, currentSliceIdx-1+up, 1);
-	        	} else {
-	        		IJ.log("no more slices to scroll");
-	        		if (currentSliceIdx<1){
-	        			currentSliceIdx=1;
-	        		} else if (currentSliceIdx>imp.getStack().getSize()) {
-	        			currentSliceIdx=imp.getStack().getSize();
-	        		}
-	        		IJ.log("Adjusted slice to "+String.valueOf(currentSliceIdx));
-	        	}
-        	}
         	//debug:
         	IJ.log("--wheel event end--");
+
         }
 
         // previously working method that fails on multiscroll:
@@ -8977,5 +9073,48 @@ public class Annotator_MainFrameNew extends PlugInFrame implements ActionListene
 		}
 
 	} // ImageListenerNew class
+
+
+	// inner class for listening to mouse wheel scrolls
+	private class WheelMovementTimerActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        	// stopped scrolling, can process
+
+        	// update currently opened roi manager in the manager list
+			managerList.set(prevSliceIdx-1,manager);
+
+        	int tmpCurSliceIdx=wheelStepCounter;
+
+        	if (imp!=null && imp.getStack().getSize()>1) {       		
+        		if (tmpCurSliceIdx>=1 && tmpCurSliceIdx<=imp.getStack().getSize()) {
+	        		// display the roi set corresponding to this slice
+	        		//debug:
+	        		IJ.log("----valid----");
+	        		currentSliceIdx=tmpCurSliceIdx;
+	        		IJ.log("Set current slice to "+String.valueOf(currentSliceIdx)+"\t\t|\t("+String.valueOf(prevSliceIdx)+")");
+
+	        	} else {
+	        		IJ.log("no more slices to scroll");
+	        		if (tmpCurSliceIdx<1){
+	        			currentSliceIdx=1;
+	        		} else if (tmpCurSliceIdx>imp.getStack().getSize()) {
+	        			currentSliceIdx=imp.getStack().getSize();
+	        		}
+	        		IJ.log("Adjusted slice to "+String.valueOf(currentSliceIdx));
+	        	}
+        	}
+
+        	imp.setPosition(1, currentSliceIdx, 1);
+    		updateROImanager(managerList.get(currentSliceIdx-1),showCnt); // also display the rois if checked
+    		//imp.setPosition(1, currentSliceIdx-1+up, 1);
+
+        	prevSliceIdx=currentSliceIdx;
+        	wheelStepCounter=currentSliceIdx;
+            
+            //debug:
+            //System.out.println("stopped\t|\t"+String.valueOf(wheelStepCounter)+"\n");
+        }
+    } // WheelMovementTimerActionListener class
 
 } //Annotator_MainFrameNew class
