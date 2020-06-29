@@ -166,9 +166,13 @@ if pc["Do_ClusterAnalysis"]: # Define (below) which values will be included in t
 (F) (t-SNE) analysis of nuclei assigned to class 1 (purple) or class 2 (yellow). 
 (G) PCA of nuclei assigned to class 1 (purple) or class 2 (yellow).
 
-### Export to and Import from AnnotatorJ (coming soon)
+### Export to and Import from AnnotatorJ
 
-Please see the [AnnotatorJ README](annotatorj-opsef/README.md).
+AnnotatorJ is and ImageJ/Fiji plugin for semi-automatic object annotation using deep learning.
+
+Please see the [AnnotatorJ repository](https://github.com/spreka/annotatorj) about the plugin and install instructions, specifically the [OpSeF import](https://github.com/spreka/annotatorj#opsef-import) and the [general usage](https://github.com/spreka/annotatorj#how-to-annotate) sections.
+
+See details in the [documentation](https://github.com/spreka/annotatorj/blob/master/AnnotatorJ_documentation.pdf) too.
 
 ### Further Information:
 
