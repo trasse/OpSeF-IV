@@ -1,0 +1,12 @@
+Info
+
+***
+S3D_NUC_ISO
+based on
+Train_3d_004-for_008_Iso_for_Opsef_Paper
+and
+009C_new_Iso_Lightsheet_64_128_128
+**
+nice validation with:
+/mnt/ag-microscopy/PreAugmentedDatasets/TestData/flower_Fig2
+**
